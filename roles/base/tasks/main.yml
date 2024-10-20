@@ -1,0 +1,57 @@
+- name: Pacman config setup
+  ansible.builtin.template:
+    src: pacman.conf.j2
+    dest: /etc/pacman.conf
+
+- name: Update pacman package cache
+  community.general.pacman:
+    update_cache: true
+
+- name: Perform full system upgrade
+  community.general.pacman:
+    update_cache: true
+    upgrade: true
+
+- name: Install base packages
+  community.general.pacman:
+    name: "{{ base_packages }}"
+    state: present
+
+- name: Install microcode updates for amd
+  community.general.pacman:
+    name: amd-ucode
+    state: present
+
+- name: Enable cronie server
+  ansible.builtin.service: name=cronie state=started enabled=true
+
+- name: Enable paccache timer
+  ansible.builtin.service: name=paccache.timer state=started enabled=true
+
+- name: Ensure group user.group exists
+  ansible.builtin.group:
+    name: "{{ user.group }}"
+    state: present
+  when: user.name is defined
+
+- name: Ensure the user user.name exists
+  ansible.builtin.user:
+    name: "{{ user.name }}"
+    shell: "{{ user.shell }}"
+    groups:
+      - "{{ user.group }}"
+      - wheel
+      - network
+      - lock
+      - uucp
+    append: true
+    system: false
+    createhome: true
+    home: /home/{{ user.name }}
+  when: user.name is defined
+
+- name: Set timezone to system.timezone
+  timezone: name={{ system.timezone }}
+
+- name: Ensure the locale system.locale exists
+  locale_gen: name={{ system.locale }} state=present

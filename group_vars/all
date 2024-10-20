@@ -1,0 +1,41 @@
+##
+# User configuration
+# ==================
+user:
+    name: go0ds1gnal
+    group: users
+    shell: /bin/zsh
+
+##
+# System configuration
+# ====================
+system:
+    locale: en_US.UTF-8
+    timezone: Europe/Lisbon
+
+##
+# Dotfile configuration
+# =====================
+dotfiles:
+    url: https://github.com/g0ods1gnal/dotfiles.git
+    destination: "/home/{{ user.name }}/.config/dotfiles"
+
+##
+# Base package configuration
+# ==========================
+base_packages:
+    - base
+    - base-devel
+    - cronie
+    - openssh
+    - pacman-contrib
+    - zsh
+    - nvidia
+    - btop
+    - curl
+    - tmux
+    - git
+    - rsync
+    - coreutils
+    - dateutils
+    - discord

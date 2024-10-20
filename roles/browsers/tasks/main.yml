@@ -1,0 +1,9 @@
+---
+
+- name: Install firefox
+  community.general.pacman: name=firefox state=present
+  tags:
+    - firefox
+
+- name: Install brave
+  command: paru --noconfirm --needed -S brave-bin

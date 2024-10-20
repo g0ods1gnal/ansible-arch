@@ -1,0 +1,57 @@
+---
+
+- name: Install dunst notification server
+  community.general.pacman:
+    name: dunst
+    state: present
+
+- name: Install fonts
+  community.general.pacman:
+    name:
+      - terminus-font
+      - ttf-dejavu
+      - ttf-liberation
+      - ttf-droid
+      - ttf-font-awesome
+      - noto-fonts-cjk
+      - noto-fonts-emoji
+      - fontconfig
+      - xorg-font-util
+      - powerline-fonts
+    state: present
+
+- name: Install i3 windowmanager and components
+  community.general.pacman:
+    name:
+      - xorg
+      - xorg-xinit
+      - i3-gaps
+      - i3lock
+      - i3status-rust
+      - dmenu
+      - ly
+      - feh
+      - dunst
+      - rofi
+      - picom
+    state: present
+
+- name: Copy Xorg mouse configs
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: /etc/X11/xorg.conf.d/
+    owner: root
+    group: root
+  with_items:
+    - 50-mouse-acceleration.conf
+    - 50-mouse-deceleration.conf
+
+- name: Enable login manager
+  service:
+    name: ly
+    enabled: yes
+
+- name: Start login manager
+  service:
+    name: ly
+    state: started

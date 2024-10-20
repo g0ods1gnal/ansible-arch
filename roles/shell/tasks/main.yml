@@ -1,0 +1,31 @@
+---
+
+- name: Install zsh with completion and syntax highlighting
+  community.general.pacman:
+    name:
+      - zsh
+      - zsh-completions
+      - zsh-syntax-highlighting
+      - zsh-autosuggestions
+    state: present
+
+- name: Install AUR Packages
+  command: paru --noconfirm --needed -S {{ item }}
+  with_items:
+      - oh-my-zsh-git
+  become_user: "{{ user.name }}"
+
+- name: Ensure the cache folder with oh-my-zsh subfolder is present
+  ansible.builtin.file:
+    path: /home/{{ user.name }}/.cache/oh-my-zsh
+    owner: "{{ user.name }}"
+    group: "{{ user.group }}"
+    state: directory
+    mode: 0755
+
+- name: Ensure the last working dir file for oh-my-zsh is present
+  ansible.builtin.file:
+    path: /home/{{ user.name }}/.cache/oh-my-zsh/last-working-dir
+    owner: "{{ user.name }}"
+    group: "{{ user.group }}"
+    state: touch

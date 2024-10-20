@@ -1,0 +1,11 @@
+---
+
+- name: Install alacritty terminal emulator
+  community.general.pacman:
+    name: "alacritty"
+    state: present
+
+- name: Install tmux terminal multiplexer
+  community.general.pacman:
+    name: tmux
+    state: present

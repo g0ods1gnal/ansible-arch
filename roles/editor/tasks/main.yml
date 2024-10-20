@@ -1,0 +1,5 @@
+--- 
+- name: Install NvChad
+  git:
+    repo: https://github.com/NvChad/starter
+    dest: "{{ user.name}} /.config/nvim"
